@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact - TaskFlow</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">✅ TaskFlow</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-hero">
+    <h1>Contact Us</h1>
+    <p>Send us your feedback — we read every message</p>
+  </header>
+
+  <main class="page-content">
+
+    <div class="info-card">
+      <h2>📬 Send Feedback</h2>
+      <div class="contact-form">
+        <input type="text" id="contactName" placeholder="Your name..." />
+        <input type="email" id="contactEmail" placeholder="Your email..." />
+        <textarea id="contactMessage" placeholder="Your message..."></textarea>
+        <button onclick="submitFeedback()">Send Message</button>
+      </div>
+      <div class="success-message" id="successMsg">
+        ✅ Message received! Thank you for your feedback.
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>📋 Previous Submissions</h2>
+      <ul class="submissions-list" id="submissionsList"></ul>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 TaskFlow. Built with HTML, CSS & JavaScript.</p>
+  </footer>
+
+  <script>
+    function submitFeedback() {
+      var name = document.getElementById("contactName").value.trim();
+      var email = document.getElementById("contactEmail").value.trim();
+      var message = document.getElementById("contactMessage").value.trim();
+
+      if (name === "" || message === "") {
+        alert("Please fill in your name and message!");
+        return;
+      }
+
+      var submissions = JSON.parse(localStorage.getItem("feedback") || "[]");
+      submissions.push({ name: name, email: email, message: message });
+      localStorage.setItem("feedback", JSON.stringify(submissions));
+
+      document.getElementById("contactName").value = "";
+      document.getElementById("contactEmail").value = "";
+      document.getElementById("contactMessage").value = "";
+
+      document.getElementById("successMsg").style.display = "block";
+      loadSubmissions();
+    }
+
+    function loadSubmissions() {
+      var list = document.getElementById("submissionsList");
+      var submissions = JSON.parse(localStorage.getItem("feedback") || "[]");
+
+      if (submissions.length === 0) {
+        list.innerHTML = "<li>No submissions yet.</li>";
+        return;
+      }
+
+      list.innerHTML = "";
+      submissions.forEach(function(s) {
+        var li = document.createElement("li");
+        li.textContent = s.name + ": " + s.message;
+        list.appendChild(li);
+      });
+    }
+
+    loadSubmissions();
+  </script>
+
+</body>
+</html>
